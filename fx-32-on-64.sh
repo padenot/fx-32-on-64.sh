@@ -69,7 +69,7 @@ sudo cp /etc/apt/sources.list $CHROOT_PATH/etc/apt/sources.list
 echo "OK"
 
 echo "Chrooting into $CHROOT_PATH, installing sudo and build dependencies"
-schroot -c $CHROOT_NAME -u root -- ./fx-32-on-64-chrooted-sudo.sh $USER
+schroot -c $CHROOT_NAME -u root -- ./fx-32-on-64-chrooted-sudo.sh
 echo "OK"
 echo "Chrooting into $CHROOT_PATH, building"
 schroot -c $CHROOT_NAME -u $USER -- ./fx-32-on-64-chrooted.sh $MC_CLONE_LOCAL_PATH
