@@ -10,6 +10,12 @@ if [ -z "$CODENAME" ]; then
   exit 1
 fi
 
+DISTRIBUTOR=`lsb_release -i | awk '{print $3}'`
+if [ -z "$DISTRIBUTOR"]; then
+  echo "Could not determine release distributor from lsb_release -i!"
+  exit 1
+fi
+
 CHROOT_NAME=${CODENAME}_i386
 CHROOT_PATH=/srv/chroot/$CHROOT_NAME
 # leave MC_CLONE_REMOTE_PATH empty to use a tree
@@ -46,8 +52,17 @@ echo "Creating the directory that will contain the chroot"
 sudo mkdir -p $CHROOT_PATH
 echo "OK"
 
+if [ "$DISTRIBUTOR" = "Ubuntu" ]; then
+  PACKAGES_ARCHIVE=http://archive.ubuntu.com/ubuntu
+elif [ "$DISTRIBUTOR" = "Debian" ]; then
+  PACKAGES_ARCHIVE=http://ftp.us.debian.org/debian
+else
+  echo "Unable to determine package archive for $DISTRIBUTOR"
+  exit 1
+fi
+
 echo "Running debootstrap to install base system in the chroot"
-sudo debootstrap --variant=buildd --arch=i386 $CODENAME $CHROOT_PATH http://archive.ubuntu.com/ubuntu
+sudo debootstrap --variant=buildd --arch=i386 $CODENAME $CHROOT_PATH $PACKAGES_ARCHIVE
 echo "OK"
 
 echo "Copying host source.list to chroot"
