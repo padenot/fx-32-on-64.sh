@@ -4,7 +4,12 @@
 # Firefox, on a 64 bits Ubuntu machine.
 
 USER=padenot
-CODENAME=`cat /etc/lsb-release | grep "DISTRIB_CODENAME" | cut -d '=' -f 2`
+CODENAME=`lsb_release -c | awk '{print $2}'`
+if [ -z "$CODENAME" ]; then
+  echo "Could not determine release codename from lsb_release -c!"
+  exit 1
+fi
+
 CHROOT_NAME=${CODENAME}_i386
 CHROOT_PATH=/srv/chroot/$CHROOT_NAME
 # leave MC_CLONE_REMOTE_PATH empty to use a tree
