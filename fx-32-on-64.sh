@@ -3,7 +3,6 @@
 # This scripts sets up and compile a 32bits Ubuntu dev environment to build
 # Firefox, on a 64 bits Ubuntu machine.
 
-USER=padenot
 CODENAME=`lsb_release -c | awk '{print $2}'`
 if [ -z "$CODENAME" ]; then
   echo "Could not determine release codename from lsb_release -c!"
