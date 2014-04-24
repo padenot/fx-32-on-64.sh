@@ -27,7 +27,7 @@ MC_CLONE_LOCAL_PATH=~/mozilla-central-32
 echo "Setting up the host"
 [ -z `which hg` ] && sudo apt-get install -y mercurial
 [ -n "$MC_CLONE_REMOTE_PATH" ] && hg clone $MC_CLONE_REMOTE_PATH $MC_CLONE_LOCAL_PATH
-cp $MOZCONFIG $MC_CLONE_LOCAL_PATH
+[ -n "$MOZCONFIG" ] && cp $MOZCONFIG $MC_CLONE_LOCAL_PATH
 echo "Installing 32bit packages necessary to run a 32bits firefox on the host"
 sudo apt-get install gcc-multilib g++-multilib libxrender1:i386 libasound-dev:i386 libdbus-glib-1-2:i386 libgtk2.0-0:i386 libxt-dev:i386
 echo "OK"
