@@ -15,17 +15,29 @@ if [ -z "$DISTRIBUTOR"]; then
   exit 1
 fi
 
+# Change this to git if you prefer to use git
+VCS=hg
+
 CHROOT_NAME=${CODENAME}_i386
 CHROOT_PATH=/srv/chroot/$CHROOT_NAME
 # leave MC_CLONE_REMOTE_PATH empty to use a tree
 # that already exists on the host, and it at MC_CLONE_LOCAL_PATH
+#if [ "$VCS" = hg ]; then
 #MC_CLONE_REMOTE_PATH=http://hg.mozilla.org/mozilla-central
+#else
+#MC_CLONE_REMOTE_PATH=git@github.com:mozilla/gecko-dev.git
+#fi
 MC_CLONE_LOCAL_PATH=~/mozilla-central-32
 
 
 echo "Setting up the host"
+if [ "$VCS" = hg ]; then
 [ -z `which hg` ] && sudo apt-get install -y mercurial
 [ -n "$MC_CLONE_REMOTE_PATH" ] && hg clone $MC_CLONE_REMOTE_PATH $MC_CLONE_LOCAL_PATH
+else
+[ -z `which git` ] && sudo apt-get install -y git
+[ -n "$MC_CLONE_REMOTE_PATH" ] && git clone $MC_CLONE_REMOTE_PATH $MC_CLONE_LOCAL_PATH
+fi
 [ -n "$MOZCONFIG" ] && cp $MOZCONFIG $MC_CLONE_LOCAL_PATH
 echo "Installing 32bit packages necessary to run a 32bits firefox on the host"
 sudo apt-get install gcc-multilib g++-multilib libxrender1:i386 libasound-dev:i386 libdbus-glib-1-2:i386 libgtk2.0-0:i386 libxt-dev:i386
